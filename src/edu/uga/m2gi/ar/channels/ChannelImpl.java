@@ -27,7 +27,10 @@ public class ChannelImpl extends Channel {
         synchronized (circularBufferIn) {
             while (circularBufferIn.empty()) {
                 try {
-                    circularBufferIn.wait();
+                    circularBufferIn.wait(10000);
+                    if (circularBufferIn.empty()) {
+                        throw new RuntimeException("No message was send since 10 seconds");
+                    }
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -40,9 +43,7 @@ public class ChannelImpl extends Channel {
                     break;
                 }
             }
-            if (circularBufferIn.full()) {
-                circularBufferIn.notify();
-            }
+            circularBufferIn.notifyAll();
             return i;
         }
     }
@@ -53,7 +54,7 @@ public class ChannelImpl extends Channel {
             return -1;
         }
         if (offset + length > bytes.length) {
-            throw new ArrayIndexOutOfBoundsException("Write buffer too small for " + offset + length + " byte.");
+            throw new ArrayIndexOutOfBoundsException();
         }
         synchronized (circularBufferOut) {
             while (circularBufferOut.full()) {
@@ -71,9 +72,7 @@ public class ChannelImpl extends Channel {
                     break;
                 }
             }
-            //if (circularBufferOut.empty()) {
-                circularBufferOut.notify();
-            //}
+            circularBufferOut.notifyAll();
             return i;
         }
     }

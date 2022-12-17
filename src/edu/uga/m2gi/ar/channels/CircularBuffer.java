@@ -18,9 +18,9 @@ package edu.uga.m2gi.ar.channels;
  *      Author: Pr. Olivier Gruber <olivier dot gruber at acm dot org>
  */
 
-class CircularBuffer {
+public class CircularBuffer {
 
-	int m_capacity;
+	public int m_capacity;
 	int m_start, m_end;
 	byte m_elements[];
 

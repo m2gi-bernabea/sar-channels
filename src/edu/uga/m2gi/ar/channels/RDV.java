@@ -11,8 +11,8 @@ public class RDV {
     private final CircularBuffer buffer2Out;
 
     public RDV(String brokerName, Integer port) {
-        bufferIn = new CircularBuffer(1000);
-        bufferOut = new CircularBuffer(1000);
+        bufferIn = new CircularBuffer(512);
+        bufferOut = new CircularBuffer(512);
         buffer2Out = bufferIn;
         buffer2In = bufferOut;
         rendezvous.put(brokerName + port, this);
